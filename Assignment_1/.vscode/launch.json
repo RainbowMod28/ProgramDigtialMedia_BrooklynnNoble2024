@@ -9,7 +9,7 @@
             "request": "launch",
             "name": "Launch Chrome against localhost",
             "url": "http://localhost:5500",
-            "webRoot": "${workspaceFolder}/Example_1.js"
+            "webRoot": "${workspaceFolder}"
         }
     ]
 }
