@@ -4,11 +4,12 @@ let bugspeed = 2
 let sensorData = {};
 
 function preload() {
-  splatImage = 0;
+  splatImage = loadImage("Splat.png");
 
-  backgroundpic = 0;
+  for (let i = 1; i < 4; i++){
+    bugSprties[i - 1] = loadImage("Rhino" + i + ".png");
+  }
 
-  splatImage = 0;
 }
 
 function setup() {
@@ -71,7 +72,7 @@ function draw() {
       }
 
     }
-    
+
     drawSprites();
 
   }
