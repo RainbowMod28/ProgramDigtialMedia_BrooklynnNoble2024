@@ -3,11 +3,17 @@ let bugSprties = []
 let bugspeed = 2
 let sensorData = {};
 
+//Make a function to define make bugs to create the bugs
+//I have defined the group but haven't put the bugs within it
+//I have to create an animation, I can either combine all into a sprite sheet
+//Look into p5play
+//
+
 function preload() {
   splatImage = loadImage("Splat.png");
-
+//I've loaded the images for the sprites, but I need to make it into an animation with the load animation fucntion
   for (let i = 1; i < 4; i++){
-    bugSprties[i - 1] = loadImage("Rhino" + i + ".png");
+    bugSprties[i - 1] = loadImage("Rhino_" + i + ".png");
   }
 
 }
@@ -77,7 +83,7 @@ function draw() {
 
   }
 
-
+//Making it draw the animation for the movement
 
 
 function bugMove(){
@@ -97,7 +103,7 @@ function bugMove(){
   }
 }
 
-
+//Need to check where the mouse currently is and if it's within the sprite bug
 function mouseReleased(){
 if (bugsLeft == 0){
   bugNumber + random([1,1,1,2,2,2,2,3,3,4,4,5,4,6,7,8,9,34,25,15]);
