@@ -22,7 +22,6 @@ function setup() {
   createCanvas(windowWidth, windowHeight);
 
   bugGroup = new Group();
-  makeBugs();
   gameState = "start";
   timerIsDone = false;
   roundNumber = 0
@@ -79,7 +78,7 @@ function draw() {
 
     }
 
-    drawSprites();
+    
 
   }
 
@@ -108,7 +107,6 @@ function mouseReleased(){
 if (bugsLeft == 0){
   bugNumber + random([1,1,1,2,2,2,2,3,3,4,4,5,4,6,7,8,9,34,25,15]);
   bugsLeft = bugNumber;
-  makeBugs();
   roundNumber++
 }
 else {
