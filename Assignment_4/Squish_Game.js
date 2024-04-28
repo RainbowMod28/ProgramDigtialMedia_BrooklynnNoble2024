@@ -31,6 +31,50 @@ function setup() {
 
 }
 
+function makeBugs(){
+  for (let j = 0; j < bugNumber; j++){
+    bug = createSprite(random([0-170, width + 190]), random([0 - 170, height + 190]), 10, 10);
+
+    let bugAnimation = bug.addAnimation("walking", bugSprties[0], bugSprties[1], bugSprties[2], bugSprties[3]);
+
+    let splatAnimation = bug.addAnimation("Splat.png");
+    bug.rotation = random([0,90,180,270]);
+
+    if (bug.rotation == 180) {
+      bug.position.x = random(120, width - 120);
+      bug.velocity.y = bugSpeed;
+    } else if (bug.rotation == 0) {
+      bug.position.x = random(120, width - 120);
+      bug.velocity.y = 0 - bugSpeed;
+    } else if (bug.rotation == 90) {
+      bug.position.y = random(120, height);
+      bug.velocity.x = bugSpeed;
+    } else {
+      bug.position.y = random(120, height);
+      bug.velocity.x = 0 - bugSpeed;
+    }
+
+    bug.isSquish = false;
+
+    bug.onMousePressed = function(){
+      this.changeAnimation("splat");
+      this.velocity.x = 0;
+      this.velocity.y = 0;
+
+      if (this.isSquish == false){
+        counter++;
+        bugsLeft--;
+        this.life = 1000;
+        squishSound.start();
+      }
+      this.isSquish = true;
+    }
+    bug.scale = 0.5;
+    bugGroup.add(bug);
+  }
+  console.log("Making" + bugNumber + "more bugs!!");
+}
+
 function draw() {
   background(220);
 
@@ -69,6 +113,8 @@ function draw() {
       text("Wave Number:" + roundNumber, (width / 2) - 50, (height / 2) + 20);
       text("Click here to play again", (width / 2) - 80, (height / 2) + 40);
 
+      console.log("Good Game! \n score:" + counter + '\nWaves:' + roundNumber);
+
       if (mouseIsPressed == true){
         if (mouseX > (width/2) -150 && mouseX < (width / 2) + 150 && mouseY > (height / 2) -50 && mouseY < (height / 2) + 50){
           endSeq.stop();
@@ -77,9 +123,7 @@ function draw() {
       }
 
     }
-
-    
-
+drawSprites();
   }
 
 //Making it draw the animation for the movement
