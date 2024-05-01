@@ -123,7 +123,7 @@ function draw() {
       }
 
     }
-drawSprites();
+    drawSprites();
   }
 
 //Making it draw the animation for the movement
