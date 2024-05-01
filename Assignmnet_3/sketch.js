@@ -5,37 +5,60 @@ let spriteWidth = 64; // Width of each frame
 let spriteHeight = 64; // Height of each frame
 let x = 0; // x position of the sprite
 let y; // y position of the sprite
-function preload() {
-  // Load all the frames of the walking animation
-  for (let i = 0; i < numSprites; i++) {
-    sprites[i] = loadImage("Photos/girlp/girl_sprite" + i + ".png");
-  }
-}
+let bg = "Photos/fnw8iuknds261.png";
+let facingLeft = false;
 
 function setup() {
-  createCanvas(400, 400);
-  y = height - spriteHeight; // Place the sprite at the bottom of the canvas
+  createCanvas(600, 600);
+  //y = height - spriteHeight; // Place the sprite at the bottom of the canvas
+  girlpAni = loadAnimation(
+    'Photos/girlp/girl_sprite1.png',
+    "Photos/girlp/girl_sprite2.png",
+    "Photos/girlp/girl_sprite3.png",
+    "Photos/girlp/girl_sprite4.png",
+    "Photos/girlp/girl_sprite5.png",
+    "Photos/girlp/girl_sprite6.png",
+    "Photos/girlp/girl_sprite7.png",
+    "Photos/girlp/girl_sprite8.png",
+    "Photos/girlp/girl_sprite9.png"
+  );
+  girlpAni.frameDelay = 10;
+
+  girlyAni = loadAnimation(
+    "Photos/girly/ygirl1.png",
+    "Photos/girly/ygirl2.png",
+    "Photos/girly/ygirl3.png",
+    "Photos/girly/ygirl4.png",
+    "Photos/girly/ygirl5.png",
+    "Photos/girly/ygirl6.png",
+    "Photos/girly/ygirl7.png",
+    "Photos/girly/ygirl8.png",
+    "Photos/girly/ygirl9.png"
+  );
+  girlyAni.frameDelay = 10;
+
+  robotAni = loadAnimation(
+    "Photos/robot/robot1.png",
+    "Photos/robot/robot2.png",
+    "Photos/robot/robot3.png",
+    "Photos/robot/robot4.png",
+    "Photos/robot/robot5.png",
+    "Photos/robot/robot6.png",
+    "Photos/robot/robot7.png",
+    "Photos/robot/robot8.png",
+    "Photos/robot/robot9.png"
+  );
+  robotAni.frameDelay = 10;
 }
 
 function draw() {
-  background(220);
+  background("#40376E");
   
-  // Display the current frame of the animation
-  image(sprites[currentSprite], x, y);
-  
-  // Increment the current frame index
-  currentSprite++;
-  
-  // Reset the current frame index if it exceeds the number of frames
-  if (currentSprite >= numSprites) {
-    currentSprite = 0;
+  animation(girlpAni,250,50)
+  animation(girlyAni, 100, 180)
+  animation(robotAni, 250, 400)
+  if (kb.pressing('a')){
+    girlpAni.direction = 180
   }
-  
-  // Move the sprite horizontally
-  x += 2;
-  
-  // Wrap around to the beginning of the canvas if the sprite moves off-screen
-  if (x > width) {
-    x = -spriteWidth;
-  }
+
 }

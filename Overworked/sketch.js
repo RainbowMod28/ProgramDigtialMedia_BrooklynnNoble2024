@@ -97,10 +97,11 @@ function draw() {
   
   if (lives <= 0) {
     textSize(32);
+    fill(255);
     text("Game Over!", width/2 - 100, height/2);
     background(bg_end);
     soundFX.player('end').start();
-    noLoop();
+    Loop();
   }
 }
 
