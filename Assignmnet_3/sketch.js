@@ -53,12 +53,23 @@ function setup() {
 
 function draw() {
   background("#40376E");
-  
+  if (facingLeft) {
+    scale(-1, -1); // Flip the sprite horizontally
+  }
   animation(girlpAni,250,50)
   animation(girlyAni, 100, 180)
   animation(robotAni, 250, 400)
-  if (kb.pressing('a')){
-    girlpAni.direction = 180
-  }
+  
+}
 
+function keyPressed() {
+  if (keyCode === LEFT_ARROW || key === 'a') {
+    facingLeft = true;
+  }
+}
+
+function keyReleased() {
+  if (keyCode === LEFT_ARROW || key === 'a') {
+    facingLeft = false;
+  }
 }
