@@ -6,6 +6,10 @@ let warningTimer, windowTimer, emailTimer, energyDrinkTimer;
 let gameStarted;
 let waveStartTime;
 let soundFX;
+let currentBackground 
+
+
+
 
 function preload() {
   warningImg = loadImage('Popups/warning.png');
@@ -15,7 +19,10 @@ function preload() {
   bg_1 = loadImage("Sprites/Overworked_1.png");
   bg_2 = loadImage("Sprites/Overworked_2.png");
   bg_3 = loadImage("Sprites/Overworked_3.png");
+  bg_4 = loadImage("Sprites/Overworked_4.png");
+  bg_win= loadImage("Sprites/Overworked_win.png");
   bg_end = loadImage("Sprites/Overworked_fail.png");
+  currentBackground = bg_1;
   preload_Music();
    music = new Tone.Player("Music/b959dadc-d4cc-4ab3-ad5c-15a291f8a2ba.mp3").toDestination(); //Has to start after an interaction
 } 
@@ -25,7 +32,8 @@ function preload_Music (){
     email: 'Music/242502__gabrielaraujo__pop-upnotification.wav',
     warning: 'Music/341278__anthonychartier2020__beep.wav',
     window:  'Music/708605__marevnik__ui_pop_up.mp3',
-    end: 'Music/Zeldas_Lullaby.mp3'
+    end: 'Music/Zeldas_Lullaby.mp3',
+    win: 'Music/FNAF_6_AM.mp3'
   }).toDestination();
 }
 
@@ -45,7 +53,28 @@ function setup() {
 }
 
 function draw() {
-  background(bg_1);
+  //background(currentBackground);
+  //backgroundChange();
+
+  if (score < 25){
+    //currentBackground = bg_1;
+    background(bg_1);
+  } else if (score >= 25 && score <= 50){
+    //currentBackground = bg_2;
+    background(bg_2);
+  } else if (score >= 50 && score <= 75){
+    background(bg_3);
+  }else if (score >= 75 && score <= 100){
+    background(bg_4);
+  }
+  else if (score > 100){
+    textSize(32);
+    fill(255);
+    text("Game Over!", width/2 - 100, height/2);
+    background(bg_win);
+    soundFX.player('win').start();
+    noLoop();
+  }
   image(warningImg, warningX, warningY);
   image(windowImg, windowX, windowY);
   image(emailImg, emailX, emailY);
@@ -54,7 +83,7 @@ function draw() {
   
   textSize(20);
   fill(0);
-  text("Lives: " + lives, 10, 30);
+  text("Energy: " + lives, 10, 30);
   text("Score: " + score, 10, 60);
   
   if (!warningClicked) {
@@ -101,7 +130,7 @@ function draw() {
     text("Game Over!", width/2 - 100, height/2);
     background(bg_end);
     soundFX.player('end').start();
-    Loop();
+    noLoop();
   }
 }
 
@@ -114,6 +143,9 @@ function mouseClicked() {
   if (d_warning < warningImg.width / 2) {
     warningClicked = true;
     score++;
+    score++;
+    score++;
+    lives--;
     resetPositions();
     warningTimer = 2000;
     soundFX.player('warning').start();
@@ -121,6 +153,8 @@ function mouseClicked() {
   if (d_window < windowImg.width / 2) {
     windowClicked = true;
     score++;
+    score++;
+    lives--;
     resetPositions();
     windowTimer = 5000;
     soundFX.player('window').start();
@@ -128,6 +162,7 @@ function mouseClicked() {
   if (d_email < emailImg.width / 2) {
     emailClicked = true;
     score++;
+    lives--;
     resetPositions();
     emailTimer = 10000;
     soundFX.player('email').start();
@@ -151,3 +186,27 @@ function resetPositions() {
   energyDrinkX = random(width - energyDrinkImg.width);
   energyDrinkY = random(height - energyDrinkImg.height);
 }
+//function checkScore() {
+  //if (score % 25 === 0 && score !== 0) {
+    //switchBackground();
+  //}
+//}
+
+//function switchBackground() {
+  //if (currentBackground === bg_1) {
+    //currentBackground = bg_2;
+  //} else if (currentBackground === bg_2) {
+  //  currentBackground = bg_3;
+  //} else if (currentBackground === bg_3) {
+   // currentBackground = bg_1;
+ // }
+//}
+
+//function backgroundChange(){
+  //if (score < 25){
+    //currentBackground = bg_1;
+    //background(bg_1);
+  //} else if (score >= 25 && score <= 50){
+    //currentBackground = bg_2;
+  //}
+  //}

@@ -1,52 +1,117 @@
-// Create audio context
-const AudioContext = window.AudioContext || window.webkitAudioContext;
-const audioContext = new AudioContext();
+let brushcolor;
+let soundFX;
+let musicLoop;
+let currentMusicNote = 0;
+let musicNotes = ['C4', 'D4', 'E4', 'F4', 'G4', 'A4', 'B4', 'C5']; // Define musical notes
 
-// Create oscillators
-const primaryOscillator = audioContext.createOscillator();
-primaryOscillator.type = 'sawtooth';
-primaryOscillator.frequency.value = 440; // Adjust frequency as needed
+function setup() {
+  createCanvas(windowWidth, windowHeight);
+  background(223);
+  brushcolor = color(0,0,0);
 
-const textureOscillator = audioContext.createOscillator();
-textureOscillator.type = 'square';
-textureOscillator.frequency.value = 880; // Adjust frequency as needed
 
-// Create filter
-const filter = audioContext.createBiquadFilter();
-filter.type = 'lowpass';
-filter.frequency.value = 2000; // Initial cutoff frequency
-filter.Q.value = 10; // Adjust resonance as needed
+  musicLoop = new Tone.Sequence((time, note) => {
+    synth.triggerAttackRelease(note, '8n', time);
+  }, musicNotes).start(0);
+  
+  synth = new Tone.Synth().toDestination();
+}
+function preload (){
+    soundFX = new Tone.Player({
+        paint : "sounds/44234__daveincamas__paintcanrhythm.wav",
+        brush : "sounds/655539__221227__paint-brush-on-canvas.wav",
+        water : "sounds/607791__department64__water_flicks_splash_034.flac"
+    }).toDestination();
+}
 
-// Create modulation (LFO)
-const lfo = audioContext.createOscillator();
-lfo.frequency.value = 5; // Modulation speed
-const lfoGain = audioContext.createGain();
-lfoGain.gain.value = 500; // Modulation depth
-lfo.connect(lfoGain);
-lfoGain.connect(filter.frequency);
+function drawColors() {
+ strokeWeight(0);
+//All the color squares
+  
+  fill(255,0,0);
+  square(0,0,90);
 
-// Create envelope
-const envelope = audioContext.createGain();
-envelope.gain.setValueAtTime(0, audioContext.currentTime);
-envelope.gain.linearRampToValueAtTime(1, audioContext.currentTime + 0.1); // Attack
-envelope.gain.linearRampToValueAtTime(0.5, audioContext.currentTime + 0.3); // Decay
+  fill(255, 128,0);
+  square(0,90,90);
 
-// Connect nodes
-primaryOscillator.connect(envelope);
-textureOscillator.connect(envelope);
-envelope.connect(filter);
-filter.connect(audioContext.destination);
+  fill(255, 255,0);
+  square(0,180,90);
 
-// Start oscillators
-primaryOscillator.start();
-textureOscillator.start();
-lfo.start();
+  fill(0,128, 0);
+  square(0,270,90);
 
-// Trigger the sound effect when canvas is clicked
-const canvas = document.getElementById('canvas');
-canvas.addEventListener('click', () => {
-    // Start the envelope
-    envelope.gain.setValueAtTime(0, audioContext.currentTime);
-    envelope.gain.linearRampToValueAtTime(1, audioContext.currentTime + 0.1);
-    envelope.gain.linearRampToValueAtTime(0, audioContext.currentTime + 0.3);
-});
+  fill(0,255,255);
+  square(0,360,90);
+
+  fill(0,0, 255);
+  square(0,450,90);
+
+  fill(255, 0, 255);
+  square(0,540,90);
+
+  fill(102, 51, 0);
+  square(0,630,90);
+
+  fill(255);
+  square(0,720,90);
+
+  fill(0);
+  square(0,810,90);
+  
+}
+
+function mousePressed(){
+  if(mouseX < 90)
+  {
+    if(mouseY < 90){
+      brushcolor = color(255,0,0);
+    }
+    else if(mouseY < 180){
+      brushcolor = color(255, 128,0);
+    }
+    else if(mouseY < 270){
+      brushcolor = color(255, 255,0);
+    }
+    else if(mouseY < 360){
+      brushcolor = color(0,128, 0);
+    }
+    else if(mouseY < 450){
+      brushcolor = color(0,255,255);
+    }
+    else if(mouseY < 540){
+      brushcolor = color(0,0, 255);
+    }
+    else if(mouseY < 630){
+      brushcolor = color(255, 0, 255);
+    }
+    else if(mouseY < 720){
+      brushcolor = color(102, 51, 0);
+    }
+    else if(mouseY < 810){
+      brushcolor = color(255);
+    }
+    else if (mouseY < 900){
+      brushcolor = color(0);
+    }
+  }
+}
+
+
+
+function draw(){
+brushX = mouseX;
+brushy = mouseY;
+
+drawColors(); 
+
+//mouse function
+cursor(CROSS);
+
+if(mouseIsPressed){
+  stroke(brushcolor);
+  strokeWeight(50);
+  line(pmouseX, pmouseY,mouseX,mouseY);
+  soundFX.player("brush").start();
+}
+  
+}
