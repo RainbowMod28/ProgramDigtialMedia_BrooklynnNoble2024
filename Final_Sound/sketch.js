@@ -8,20 +8,24 @@ function setup() {
   createCanvas(windowWidth, windowHeight);
   background(223);
   brushcolor = color(0,0,0);
+  textSize(20);
+  text("Press M for Music!", 90, 15);
+  //let button =createButton("music");
+  //button.position(90,0);
+  //button.mousePressed(togglePlaying);
 
 
-  musicLoop = new Tone.Sequence((time, note) => {
-    synth.triggerAttackRelease(note, '8n', time);
-  }, musicNotes).start(0);
+
   
-  synth = new Tone.Synth().toDestination();
 }
-function preload (){
-    soundFX = new Tone.Player({
-        paint : "sounds/44234__daveincamas__paintcanrhythm.wav",
-        brush : "sounds/655539__221227__paint-brush-on-canvas.wav",
-        water : "sounds/607791__department64__water_flicks_splash_034.flac"
+function preload(){
+    soundFX = new Tone.Players({
+        paint: "sounds/44234__daveincamas__paintcanrhythm.wav",
+        brush: "sounds/655539__221227__paint-brush-on-canvas.wav",
+        water: "sounds/607791__department64__water_flicks_splash_034.flac",
+        music: "sounds/classicalmusic.mp3"
     }).toDestination();
+
 }
 
 function drawColors() {
@@ -65,33 +69,43 @@ function mousePressed(){
   {
     if(mouseY < 90){
       brushcolor = color(255,0,0);
+      soundFX.player("water").start();
     }
     else if(mouseY < 180){
       brushcolor = color(255, 128,0);
+      soundFX.player("paint").start();
     }
     else if(mouseY < 270){
       brushcolor = color(255, 255,0);
+      soundFX.player("water").start();
     }
     else if(mouseY < 360){
       brushcolor = color(0,128, 0);
+      soundFX.player("paint").start();
     }
     else if(mouseY < 450){
       brushcolor = color(0,255,255);
+      soundFX.player("water").start();
     }
     else if(mouseY < 540){
       brushcolor = color(0,0, 255);
+      soundFX.player("paint").start();
     }
     else if(mouseY < 630){
       brushcolor = color(255, 0, 255);
+      soundFX.player("water").start();
     }
     else if(mouseY < 720){
       brushcolor = color(102, 51, 0);
+      soundFX.player("paint").start();
     }
     else if(mouseY < 810){
       brushcolor = color(255);
+      soundFX.player("water").start();
     }
     else if (mouseY < 900){
       brushcolor = color(0);
+      soundFX.player("paint").start();
     }
   }
 }
@@ -107,6 +121,9 @@ drawColors();
 //mouse function
 cursor(CROSS);
 
+
+
+
 if(mouseIsPressed){
   stroke(brushcolor);
   strokeWeight(50);
@@ -115,3 +132,9 @@ if(mouseIsPressed){
 }
   
 }
+function keyPressed(){
+  if (key == 'm'){
+    soundFX.player("music").start();
+  }
+}
+ 
