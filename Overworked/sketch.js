@@ -1,7 +1,7 @@
 let warningImg, windowImg, emailImg, energyDrinkImg;
 let warningX, warningY, windowX, windowY, emailX, emailY, energyDrinkX, energyDrinkY;
 let warningClicked, windowClicked, emailClicked, energyDrinkClicked;
-let lives, score;
+let lives, score, count, drinkCount, warningCount, emailCount, windowCount;
 let warningTimer, windowTimer, emailTimer, energyDrinkTimer;
 let gameStarted;
 let waveStartTime;
@@ -46,6 +46,11 @@ function setup() {
   energyDrinkClicked = false;
   lives = 3;
   score = 0;
+  count = 0;
+  emailCount = 0;
+  windowCount = 0;
+  warningCount = 0;
+  drinkCount = 0;
   warningTimer = 2000;
   windowTimer = 5000;
   emailTimer = 10000;
@@ -67,14 +72,7 @@ function draw() {
   }else if (score >= 75 && score <= 100){
     background(bg_4);
   }
-  else if (score > 100){
-    textSize(32);
-    fill(255);
-    text("Game Over!", width/2 - 100, height/2);
-    background(bg_win);
-    soundFX.player('win').start();
-    noLoop();
-  }
+  
   image(warningImg, warningX, warningY);
   image(windowImg, windowX, windowY);
   image(emailImg, emailX, emailY);
@@ -85,6 +83,7 @@ function draw() {
   fill(0);
   text("Energy: " + lives, 10, 30);
   text("Score: " + score, 10, 60);
+  text("Clicks: " + count, 10, 90)
   
   if (!warningClicked) {
     warningTimer -= deltaTime;
@@ -131,6 +130,16 @@ function draw() {
     background(bg_end);
     soundFX.player('end').start();
     noLoop();
+  }else if (score > 100){
+    background(bg_win);
+    textSize(32);
+    text("Drinks Consumed: " + drinkCount, 10, 30);
+    text("Warnings Fixed: " + warningCount, 10, 60);
+    text("Emails Answered: " + emailCount, 10, 90)
+    text("Files Completed: " + emailCount, 10, 120)
+    text("Clicks: " + count, 10, 150)
+    soundFX.player('win').start();
+    noLoop();
   }
 }
 
@@ -146,6 +155,11 @@ function mouseClicked() {
     score++;
     score++;
     lives--;
+    lives--;
+    lives--;
+    lives--;
+    count++;
+    warningCount++;
     resetPositions();
     warningTimer = 2000;
     soundFX.player('warning').start();
@@ -155,6 +169,9 @@ function mouseClicked() {
     score++;
     score++;
     lives--;
+    lives--;
+    count++;
+    windowCount;
     resetPositions();
     windowTimer = 5000;
     soundFX.player('window').start();
@@ -163,6 +180,8 @@ function mouseClicked() {
     emailClicked = true;
     score++;
     lives--;
+    count++;
+    emailCount++;
     resetPositions();
     emailTimer = 10000;
     soundFX.player('email').start();
@@ -170,6 +189,10 @@ function mouseClicked() {
   if (d_energyDrink < energyDrinkImg.width / 2) {
     energyDrinkClicked = true;
     lives++;
+    //lives++;//only for testing
+    //lives++; //only for testing
+    count++;
+    drinkCount++;
     resetPositions();
     energyDrinkTimer = 4000;
     soundFX.player('can').start();
