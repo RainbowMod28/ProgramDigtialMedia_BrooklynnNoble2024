@@ -1,4 +1,7 @@
 let bgColorSlider;
+let port;
+let connectButton;
+
 
 function setup() {
   createCanvas(400, 400);
@@ -16,4 +19,11 @@ function draw() {
   // Draw a circle
   fill(255);
   ellipse(width / 2, height / 2, 200, 200);
+}
+function connect() {
+  if (!port.opened()){
+    port.open('Arduino',9600)
+  } else {
+    port.close();
+  }
 }

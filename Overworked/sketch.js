@@ -3,10 +3,15 @@ let warningX, warningY, windowX, windowY, emailX, emailY, energyDrinkX, energyDr
 let warningClicked, windowClicked, emailClicked, energyDrinkClicked;
 let lives, score, count, drinkCount, warningCount, emailCount, windowCount;
 let warningTimer, windowTimer, emailTimer, energyDrinkTimer;
-let gameStarted;
+let gameStarted = false;
 let waveStartTime;
 let soundFX;
-let currentBackground 
+let currentBackground;
+let startButton;
+let port;
+let connectButton;
+let buttonState =0;
+let lastButtonState = 0; 
 
 
 
@@ -22,9 +27,13 @@ function preload() {
   bg_4 = loadImage("Sprites/Overworked_4.png");
   bg_win= loadImage("Sprites/Overworked_win.png");
   bg_end = loadImage("Sprites/Overworked_fail.png");
+  bg_start = loadImage("Sprites/Overworked.png");
   currentBackground = bg_1;
+
+
+  
   preload_Music();
-   music = new Tone.Player("Music/b959dadc-d4cc-4ab3-ad5c-15a291f8a2ba.mp3").toDestination(); //Has to start after an interaction
+   //music = new Tone.Player("Music/b959dadc-d4cc-4ab3-ad5c-15a291f8a2ba.mp3").toDestination(); //Has to start after an interaction
 } 
 function preload_Music (){
   soundFX = new Tone.Players({
@@ -33,13 +42,23 @@ function preload_Music (){
     warning: 'Music/341278__anthonychartier2020__beep.wav',
     window:  'Music/708605__marevnik__ui_pop_up.mp3',
     end: 'Music/Zeldas_Lullaby.mp3',
-    win: 'Music/FNAF_6_AM.mp3'
+    win: 'Music/FNAF_6_AM.mp3',
+    music: "Music/b959dadc-d4cc-4ab3-ad5c-15a291f8a2ba.mp3"
   }).toDestination();
 }
 
 function setup() {
+  port = createSerial();
   createCanvas(windowWidth, windowHeight);
   resetPositions();
+
+  connectButton = createButton("Connect");
+  connectButton.mousePressed(connect);
+  
+  startButton = createButton("Start Your Overtime");
+  startButton.position(width / 2 - 50, height/2, 50);
+  startButton.mousePressed(startGame);
+  
   warningClicked = false;
   windowClicked = false;
   emailClicked = false;
@@ -55,11 +74,18 @@ function setup() {
   windowTimer = 5000;
   emailTimer = 10000;
   energyDrinkTimer = 4000;
+  
+ 
 }
 
 function draw() {
   //background(currentBackground);
   //backgroundChange();
+  let str = port.readUntil("\n");
+
+  if (!gameStarted){
+  startScreen();
+  }else{
 
   if (score < 25){
     //currentBackground = bg_1;
@@ -116,6 +142,7 @@ function draw() {
       energyDrinkTimer = 1000;
       lives--;
     }
+    
   }
   // Decrease lives every 2 seconds
   if (millis() - waveStartTime >= 2000) {
@@ -125,10 +152,24 @@ function draw() {
   
   if (lives <= 0) {
     textSize(32);
-    fill(255);
-    text("Game Over!", width/2 - 100, height/2);
+    fill(0);
+    text("Game Over!", width/2, height/2);
     background(bg_end);
+    //soundFX.player('music').stop();
     soundFX.player('end').start();
+    stopBackgroundMusic();
+
+    if (port.read() == "RestartGame") {
+      // If the button is pressed, set the flag to restart the game
+      if (buttonState == 1) {
+        restartGame();
+      } else{
+        restartGame = 0;
+      }
+      // Save the current button state for comparison
+      lastButtonState = buttonState;
+    }
+    
     noLoop();
   }else if (score > 100){
     background(bg_win);
@@ -139,11 +180,22 @@ function draw() {
     text("Files Completed: " + emailCount, 10, 120)
     text("Clicks: " + count, 10, 150)
     soundFX.player('win').start();
+    stopBackgroundMusic();
+    
     noLoop();
   }
+  if(lives < 8){
+    if (port.opened()) {
+      port.write("B");
+    }
+  }
+
+}
+
 }
 
 function mouseClicked() {
+    
   let d_warning = dist(mouseX, mouseY, warningX + warningImg.width / 2, warningY + warningImg.height / 2);
   let d_window = dist(mouseX, mouseY, windowX + windowImg.width / 2, windowY + windowImg.height / 2);
   let d_email = dist(mouseX, mouseY, emailX + emailImg.width / 2, emailY + emailImg.height / 2);
@@ -189,8 +241,8 @@ function mouseClicked() {
   if (d_energyDrink < energyDrinkImg.width / 2) {
     energyDrinkClicked = true;
     lives++;
-    //lives++;//only for testing
-    //lives++; //only for testing
+    lives++;//only for testing
+    lives++; //only for testing
     count++;
     drinkCount++;
     resetPositions();
@@ -198,6 +250,7 @@ function mouseClicked() {
     soundFX.player('can').start();
   }
 }
+
 
 function resetPositions() {
   warningX = random(width - warningImg.width);
@@ -209,6 +262,44 @@ function resetPositions() {
   energyDrinkX = random(width - energyDrinkImg.width);
   energyDrinkY = random(height - energyDrinkImg.height);
 }
+
+
+function startScreen(){
+background(bg_start);
+
+textSize(20)
+textAlign(CENTER,CENTER);
+text("Engergy Drinks to refuel your engergy, \nComplete assignments to finsih your job.", width/1.5, 300);
+
+//Start Button
+startButton.show();
+}
+
+function startGame(){
+  startButton.hide();
+
+  gameStarted = true;
+  startBackgroundMusic();
+  
+}
+function startBackgroundMusic(){
+  soundFX.player('music').start();
+}
+function stopBackgroundMusic(){
+  soundFX.player('music').stop();
+}
+function connect(){
+  if (!port.opened()){
+    port.open("Arduino", 9600);
+  }else{
+    port.close();
+  }
+  }
+
+  function restartGame(){
+    startScreen();
+  }
+
 //function checkScore() {
   //if (score % 25 === 0 && score !== 0) {
     //switchBackground();
