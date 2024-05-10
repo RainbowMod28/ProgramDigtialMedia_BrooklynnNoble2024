@@ -241,8 +241,8 @@ function mouseClicked() {
   if (d_energyDrink < energyDrinkImg.width / 2) {
     energyDrinkClicked = true;
     lives++;
-    lives++;//only for testing
-    lives++; //only for testing
+    //lives++;//only for testing
+    //lives++; //only for testing
     count++;
     drinkCount++;
     resetPositions();

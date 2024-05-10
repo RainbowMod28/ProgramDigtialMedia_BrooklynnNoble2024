@@ -75,7 +75,7 @@ function drawColors() {
 }
 
 function mousePressed(){
-  if(sw == 1){
+  //if(sw == 1){
   if(mouseX < 90)
   {
     if(mouseY < 90){
@@ -120,7 +120,7 @@ function mousePressed(){
     }
   }
 }
-}
+//}
 
 
 
